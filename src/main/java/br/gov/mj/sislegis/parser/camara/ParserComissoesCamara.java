@@ -44,14 +44,9 @@ public class ParserComissoesCamara {
 }
 
 class ListaComissoes {
+	protected List<Comissao> comissoes;
 	
-	private List<Comissao> comissoes;
-	
-	public List<Comissao> getComissoes() {
+	protected List<Comissao> getComissoes() {
 		return comissoes;
-	}
-
-	public void setComissoes(List<Comissao> comissoes) {
-		this.comissoes = comissoes;
 	}
 }

@@ -75,56 +75,21 @@ public class ParserPautaCamara {
 }
 
 class PautaBean {
+	protected String orgao;
+	protected String dataInicial;
+	protected String dataFinal;
 
-	private String orgao;
-	private String dataInicial;
-	private String dataFinal;
+	protected List<ReuniaoBean> reunioes;
 
-	private List<ReuniaoBean> reunioes;
-
-	public String getOrgao() {
-		return orgao;
-	}
-
-	public void setOrgao(String orgao) {
-		this.orgao = orgao;
-	}
-
-	public String getDataInicial() {
-		return dataInicial;
-	}
-
-	public void setDataInicial(String dataInicial) {
-		this.dataInicial = dataInicial;
-	}
-
-	public String getDataFinal() {
-		return dataFinal;
-	}
-
-	public void setDataFinal(String dataFinal) {
-		this.dataFinal = dataFinal;
-	}
-
-	public List<ReuniaoBean> getReunioes() {
+	protected List<ReuniaoBean> getReunioes() {
 		return reunioes;
 	}
-
-	public void setReunioes(List<ReuniaoBean> reunioes) {
-		this.reunioes = reunioes;
-	}
-
 }
 
 class ReuniaoBean {
+	protected List<Proposicao> proposicoes;
 
-	private List<Proposicao> proposicoes;
-
-	public List<Proposicao> getProposicoes() {
+	protected List<Proposicao> getProposicoes() {
 		return proposicoes;
-	}
-
-	public void setProposicoes(List<Proposicao> proposicoes) {
-		this.proposicoes = proposicoes;
 	}
 }
