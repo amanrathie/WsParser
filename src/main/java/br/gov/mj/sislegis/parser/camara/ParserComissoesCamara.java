@@ -54,12 +54,4 @@ class ListaComissoes {
 	public void setComissoes(List<Comissao> comissoes) {
 		this.comissoes = comissoes;
 	}
-	
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		for (Comissao orgao : this.getComissoes()) {
-			sb.append(orgao.getSigla() + "\n");
-		}
-		return sb.toString();
-	}
 }
