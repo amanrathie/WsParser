@@ -19,11 +19,11 @@ public class ParserProposicaoCamara {
 		URL url = new URL(wsURL);
 		
 		XStream xstream = new XStream();
+		xstream.ignoreUnknownElements();
+		
 		Proposicao proposicao = new Proposicao();
 		
 		config(xstream);
-		
-		ignoreFields(xstream);
 
 		xstream.fromXML(url, proposicao);
 		
@@ -40,22 +40,5 @@ public class ParserProposicaoCamara {
 		xstream.aliasField("nomeProposicao", Proposicao.class, "sigla");
 		xstream.aliasField("Ementa", Proposicao.class, "ementa");
 		xstream.aliasField("Autor", Proposicao.class, "autor");
-	}
-	
-	// Ignora o que não precisa de parse
-	private static void ignoreFields(XStream xstream) {
-		xstream.omitField(Proposicao.class, "idProposicaoPrincipal");
-		xstream.omitField(Proposicao.class, "nomeProposicaoOrigem");
-		xstream.omitField(Proposicao.class, "tipoProposicao");
-		xstream.omitField(Proposicao.class, "tema");
-		xstream.omitField(Proposicao.class, "ExplicacaoEmenta");
-		xstream.omitField(Proposicao.class, "DataApresentacao");
-		xstream.omitField(Proposicao.class, "RegimeTramitacao");
-		xstream.omitField(Proposicao.class, "UltimoDespacho");
-		xstream.omitField(Proposicao.class, "Apreciacao");
-		xstream.omitField(Proposicao.class, "Indexacao");
-		xstream.omitField(Proposicao.class, "Situacao");
-		xstream.omitField(Proposicao.class, "LinkInteiroTeor");
-		xstream.omitField(Proposicao.class, "apensadas");
 	}
 }

@@ -24,10 +24,9 @@ public class ParserPautaSenado {
 		List<Proposicao> proposicoes = new ArrayList<Proposicao>();
 			
 		XStream xstreamReuniao = new XStream();
+		xstreamReuniao.ignoreUnknownElements();
 		
 		configReuniao(xstreamReuniao);
-		
-		ignoreFieldsReuniao(xstreamReuniao);
 
 		for (ReuniaoBean bean : getReunioes(siglaComissao, datIni)) {
 			String wsURLReuniao = "http://legis.senado.leg.br/dadosabertos/reuniao/"+bean.getCodigo();
@@ -35,6 +34,7 @@ public class ParserPautaSenado {
 			ReuniaoBean reuniao = new ReuniaoBean();
 			
 			xstreamReuniao.fromXML(url, reuniao);
+			proposicoes.addAll(reuniao.getProposicoes());
 		}
 		
 		return proposicoes;
@@ -45,11 +45,11 @@ public class ParserPautaSenado {
 		URL url = new URL(wsURL);
 		
 		XStream xstreamAgenda = new XStream();
+		xstreamAgenda.ignoreUnknownElements();
+		
 		ListaReunioes reunioes = new ListaReunioes();
 		
 		configAgenda(xstreamAgenda);
-		
-		ignoreFieldsAgenda(xstreamAgenda);
 
 		xstreamAgenda.fromXML(url, reunioes);
 	
@@ -65,115 +65,76 @@ public class ParserPautaSenado {
 		xstream.aliasField("Codigo", ReuniaoBean.class, "codigo");
 	}
 	
-	// Ignora o que não precisa de parse
-	private void ignoreFieldsAgenda(XStream xstream) {
-		xstream.omitField(ReuniaoBean.class, "Tipo");
-		xstream.omitField(ReuniaoBean.class, "Data");
-		xstream.omitField(ReuniaoBean.class, "Hora");
-		xstream.omitField(ReuniaoBean.class, "Situacao");
-		xstream.omitField(ReuniaoBean.class, "Local");
-		xstream.omitField(ReuniaoBean.class, "ExisteItemTerminativo");
-		
-		xstream.omitField(ReuniaoBean.class, "Comissoes");
-		xstream.omitField(ReuniaoBean.class, "Partes");
-	}
-	
-	/**
-	 * TODO: Montar parsing das proposicoes (materias)
-	 */
 	private void configReuniao(XStream xstream) {
 		xstream.alias("Reuniao", ReuniaoBean.class);
-		xstream.alias("Partes", ListaPartes.class);
 		xstream.alias("Parte", ParteBean.class);
-		xstream.alias("Itens", ListaItens.class);
 		xstream.alias("Item", ItemBean.class);
+		xstream.alias("Materia", Proposicao.class);
 		
-		xstream.addImplicitCollection(ListaPartes.class, "partes");
 		xstream.aliasField("Partes", ReuniaoBean.class, "partes");
 		xstream.aliasField("Codigo", ReuniaoBean.class, "codigo");
-		
 		xstream.aliasField("Itens", ParteBean.class, "itens");
-		xstream.addImplicitCollection(ListaItens.class, "itens");		
-	}
-	
-	// Ignora o que não precisa de parse
-	private void ignoreFieldsReuniao(XStream xstream) {
-		xstream.omitField(ReuniaoBean.class, "Data");
-		xstream.omitField(ReuniaoBean.class, "Hora");
-		xstream.omitField(ReuniaoBean.class, "Tipo");
-		xstream.omitField(ReuniaoBean.class, "Situacao");
-		xstream.omitField(ReuniaoBean.class, "Realizada");
-		xstream.omitField(ReuniaoBean.class, "Local");
-		xstream.omitField(ReuniaoBean.class, "Comissoes");
-		
-		xstream.omitField(ParteBean.class, "Codigo");
-		xstream.omitField(ParteBean.class, "NumOrdem");
-		xstream.omitField(ParteBean.class, "CodigoTipo");
-		xstream.omitField(ParteBean.class, "Tipo");
-		xstream.omitField(ParteBean.class, "NomeFantasia");
-		xstream.omitField(ParteBean.class, "ExisteItemTerminativo");
-		xstream.omitField(ParteBean.class, "Eventos");
-		
-		xstream.omitField(ItemBean.class, "Codigo");
-		xstream.omitField(ItemBean.class, "SeqOrdemPauta");
-		xstream.omitField(ItemBean.class, "Nome");
-		xstream.omitField(ItemBean.class, "NomeFormatadoComOrdem");
-		xstream.omitField(ItemBean.class, "ItemTerminativo");
-		xstream.omitField(ItemBean.class, "TipoPauta");
-		xstream.omitField(ItemBean.class, "Categoria");
-		xstream.omitField(ItemBean.class, "Relatorio");
-		xstream.omitField(ItemBean.class, "Observacao");
-		xstream.omitField(ItemBean.class, "Resultado");
-		
-		xstream.omitField(MateriaBean.class, "DescricaoSubtipo");
-		xstream.omitField(MateriaBean.class, "ExplicacaoEmenta");
-		xstream.omitField(MateriaBean.class, "Indexacao");
-		xstream.omitField(MateriaBean.class, "SiglaCasaIniciadora");
-		xstream.omitField(MateriaBean.class, "SiglaCasaLeitura");
-		xstream.omitField(MateriaBean.class, "Prazos");
+		xstream.aliasField("Materia", ItemBean.class, "proposicao");
+		xstream.aliasField("Codigo", Proposicao.class, "idProposicao");
+		xstream.aliasField("Subtipo", Proposicao.class, "tipo");
+		xstream.aliasField("Numero", Proposicao.class, "numero");
+		xstream.aliasField("Ano", Proposicao.class, "ano");
+		xstream.aliasField("Ementa", Proposicao.class, "ementa");
 	}
 }
 
 class ListaReunioes {
 	protected List<ReuniaoBean> reunioes;
 
-	public List<ReuniaoBean> getReunioes() {
+	protected List<ReuniaoBean> getReunioes() {
 		return reunioes;
 	}
 }
 
 class ReuniaoBean {
 	protected Integer codigo;
-	protected ListaPartes partes;
+	protected List<ParteBean> partes;
 	
-	public Integer getCodigo() {
+	protected Integer getCodigo() {
 		return codigo;
 	}
-}
-
-class ListaPartes {
-	protected List<ParteBean> partes;
+	
+	protected List<ParteBean> getPartes() {
+		return partes;
+	}
+	
+	protected List<Proposicao> getProposicoes() {
+		List<Proposicao> materias = new ArrayList<Proposicao>();
+		
+		for (ParteBean parteBean : this.getPartes()) {
+			List<ItemBean> itens = parteBean.getItens();
+		
+			for (ItemBean itemBean : itens) {
+				materias.add(itemBean.getProposicao());
+			}
+		}
+		
+		return materias;
+	}
+	
 }
 
 class ParteBean {
-	protected ListaItens itens;
-}
-
-class ListaItens {
 	protected List<ItemBean> itens;
+
+	protected List<ItemBean> getItens() {
+		return itens;
+	}
+
+	protected void setItens(List<ItemBean> itens) {
+		this.itens = itens;
+	}
 }
 
 class ItemBean {
-	protected MateriaBean materia;
-	
-}
+	protected Proposicao proposicao;
 
-class MateriaBean {
-	protected Integer codigo;
-	protected String subtipo;
-	protected String numero;
-	protected String ano;
-	protected String ementa;
-	
+	protected Proposicao getProposicao() {
+		return proposicao;
+	}
 }
-

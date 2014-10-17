@@ -17,11 +17,12 @@ public class ParserComissoesCamara {
 		URL url = new URL("http://www.camara.gov.br/SitCamaraWS/Orgaos.asmx/ObterOrgaos");
 
 		XStream xstream = new XStream();
+		xstream.ignoreUnknownElements();
+		
 		ListaComissoes comissoes = new ListaComissoes();
 
 		config(xstream);
-		
-		ignoreFields(xstream);
+
 		
 		xstream.fromXML(url, comissoes);
 
@@ -35,11 +36,6 @@ public class ParserComissoesCamara {
 		xstream.addImplicitCollection(ListaComissoes.class, "comissoes");
 		xstream.aliasAttribute(Comissao.class, "id", "id");
 		xstream.aliasAttribute(Comissao.class, "sigla", "sigla");
-	}
-	
-	// Ignora o que não precisa de parse
-	private void ignoreFields(XStream xstream) {
-
 	}
 }
 

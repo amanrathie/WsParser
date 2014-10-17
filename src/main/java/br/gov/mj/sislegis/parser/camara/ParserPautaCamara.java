@@ -29,11 +29,11 @@ public class ParserPautaCamara {
 		URL url = new URL(wsURL);
 
 		XStream xstream = new XStream();
+		xstream.ignoreUnknownElements();
+		
 		PautaBean pauta = new PautaBean();
 
 		config(xstream);
-
-		ignoreFields(xstream);
 
 		xstream.fromXML(url, pauta);
 
@@ -52,25 +52,11 @@ public class ParserPautaCamara {
 		xstream.alias("proposicao", Proposicao.class);
 
 		// Utilizamos o implicit quando os filhos já tem os dados que queremos
-		// buscar. Ou seja, não tem um pai e v�rios filhos do mesmo tipo.
+		// buscar. Ou seja, não tem um pai e vários filhos do mesmo tipo.
 		xstream.addImplicitCollection(PautaBean.class, "reunioes");
 		xstream.aliasAttribute(PautaBean.class, "orgao", "orgao");
 		xstream.aliasAttribute(PautaBean.class, "dataInicial", "dataInicial");
 		xstream.aliasAttribute(PautaBean.class, "dataFinal", "dataFinal");
-	}
-
-	// Ignora o que não precisa de parse
-	private void ignoreFields(XStream xstream) {
-		xstream.omitField(ReuniaoBean.class, "codReuniao");
-		xstream.omitField(ReuniaoBean.class, "data");
-		xstream.omitField(ReuniaoBean.class, "horario");
-		xstream.omitField(ReuniaoBean.class, "local");
-		xstream.omitField(ReuniaoBean.class, "estado");
-		xstream.omitField(ReuniaoBean.class, "tipo");
-		xstream.omitField(ReuniaoBean.class, "tituloReuniao");
-		xstream.omitField(ReuniaoBean.class, "objeto");
-
-		xstream.omitField(Proposicao.class, "resultado");
 	}
 }
 

@@ -18,11 +18,10 @@ public class ParserComissoesSenado {
 		URL url = new URL("http://legis.senado.leg.br/dadosabertos/comissao/lista/colegiados");
 
 		XStream xstream = new XStream();
+		xstream.ignoreUnknownElements();
 		ListaColegiados comissoes = new ListaColegiados();
 
 		config(xstream);
-		
-		ignoreFields(xstream);
 		
 		xstream.fromXML(url, comissoes);
 
@@ -36,19 +35,6 @@ public class ParserComissoesSenado {
 		xstream.aliasField("Colegiados", ListaColegiados.class, "comissoes");
 		xstream.aliasField("Codigo", Comissao.class, "id");
 		xstream.aliasField("Sigla", Comissao.class, "sigla");
-	}
-	
-	// Ignora o que não precisa de parse
-	private void ignoreFields(XStream xstream) {
-		xstream.omitField(ListaColegiados.class, "Metadados");
-		xstream.omitField(Comissao.class, "Nome");
-		xstream.omitField(Comissao.class, "Finalidade");
-		xstream.omitField(Comissao.class, "DataInicio");
-		xstream.omitField(Comissao.class, "Publica");
-		xstream.omitField(Comissao.class, "CodigoTipoColegiado");
-		xstream.omitField(Comissao.class, "SiglaTipoColegiado");
-		xstream.omitField(Comissao.class, "DescricaoTipoColegiado");
-		xstream.omitField(Comissao.class, "DataPrazoFinal");
 	}
 }
 

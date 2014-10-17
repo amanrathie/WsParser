@@ -7,7 +7,7 @@ public class Proposicao {
 	private String sigla;
 	private String ementa;
 	private String tipo;
-	private Integer numero;
+	private String numero;
 	private Integer ano;
 	private String autor;
 	
@@ -35,10 +35,10 @@ public class Proposicao {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	public Integer getNumero() {
+	public String getNumero() {
 		return numero;
 	}
-	public void setNumero(Integer numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 	public Integer getAno() {
